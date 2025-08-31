@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: bidcart
+    env: node
+    region: singapore  # Choose the closest region to your users
+    build:
+      path: .
+      env:
+        - key: NODE_VERSION
+          value: 18.x
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false  # Will be set in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "30d"
+      - key: JWT_COOKIE_EXPIRES
+        value: "30"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: CLIENT_URL
+        value: https://your-render-app-url.onrender.com  # Update this after deployment
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+    buildCommand: |
+      npm install
+      cd client && npm install && npm run build
+    startCommand: node server/index.js
+    plan: free
+    healthCheckPath: /api/test-root
+    autoDeploy: true
+    envKeyFormat: camelcase
+    
+    # Auto-scaling (adjust based on your needs)
+    autoScaling:
+      minInstances: 1
+      maxInstances: 3
+      targetCpuUtilizationPercent: 70
+
+# No need for database section since we're using MongoDB Atlas
