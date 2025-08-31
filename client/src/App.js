@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Suspense } from 'react';
+import Loading from './components/common/Loading';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
@@ -7,6 +8,7 @@ import { SocketProvider } from './contexts/SocketContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { AdminDataProvider } from './contexts/AdminDataContext';
 import { useSocketEvents } from './hooks/useSocketEvents';
+import { useApiLoading } from './utils/api';
 
 // Components
 import Navbar from './components/layout/Navbar';
@@ -262,8 +264,9 @@ function App() {
                 </main>
                 <Footer />
                 
+                <Toaster position="top-right" />
+                <GlobalLoadingIndicator />
                 <Toaster 
-                  position="top-right"
                   toastOptions={{
                     duration: 4000,
                     style: {
@@ -281,5 +284,18 @@ function App() {
     </AuthProvider>
   );
 }
+
+// Global loading indicator component
+const GlobalLoadingIndicator = () => {
+  const isLoading = useApiLoading();
+  
+  if (!isLoading) return null;
+  
+  return (
+    <div className="fixed top-4 right-4 z-50">
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+    </div>
+  );
+};
 
 export default App;

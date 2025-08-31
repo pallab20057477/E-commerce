@@ -172,7 +172,7 @@ const SocketStatusIndicator = () => {
             {/* Connection Info */}
             <div className="border-t border-base-300 pt-2">
               <div className="text-xs text-base-content/60">
-                <div>Server: {process.env.REACT_APP_API_URL || 'localhost:5000'}</div>
+                <div>Server: e-commerce-2-8abd.onrender.com</div>
                 <div>Protocol: Socket.IO v4</div>
                 <div>Socket ID: {socket?.id || 'Not connected'}</div>
               </div>
