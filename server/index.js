@@ -52,8 +52,12 @@ app.set('io', io);
 const allowedOrigins = [
   'https://bidcart-v32j.onrender.com',
   'http://localhost:3000',
+  'https://e-commerce-2-8abd.onrender.com',
   process.env.CLIENT_URL
 ].filter(Boolean);
+
+// Log allowed origins for debugging
+console.log('Allowed CORS origins:', allowedOrigins);
 
 // Configure CORS with specific options
 const corsOptions = {
