@@ -50,14 +50,26 @@ app.set('io', io);
 
 // CORS Configuration
 const corsOptions = {
-  origin: [
-    'https://bidcart-v32j.onrender.com',  // Production frontend
-    'http://localhost:3000',              // Local development
-    process.env.CLIENT_URL                // From environment variable
-  ].filter(Boolean), // Remove any falsy values
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://bidcart-v32j.onrender.com',
+      'http://localhost:3000',
+      process.env.CLIENT_URL
+    ].filter(Boolean);
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
 };
 
 // Middleware
