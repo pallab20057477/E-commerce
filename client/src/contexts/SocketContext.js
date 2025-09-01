@@ -34,7 +34,7 @@ export const SocketProvider = ({ children }) => {
       console.log('User Role:', user.role);
       console.log('Token present:', !!currentToken);
       
-      const newSocket = io('http://localhost:5000', {
+      const newSocket = io('https://e-commerce-2-8abd.onrender.com', {
         auth: { token: currentToken }
       });
 

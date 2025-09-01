@@ -51,7 +51,7 @@ const VendorApplication = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return;
-    const socket = io('http://localhost:5000', {
+    const socket = io('https://e-commerce-2-8abd.onrender.com', {
       auth: { token }
     });
     socket.on('vendor-request:status', (data) => {

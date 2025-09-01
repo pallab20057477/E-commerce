@@ -16,7 +16,7 @@ const VendorRequestManagement = () => {
   useEffect(() => {
     fetchRequests();
     fetchStats();
-    const socket = io('http://localhost:5000', {
+    const socket = io('https://e-commerce-2-8abd.onrender.com', {
       auth: { token: localStorage.getItem('token') }
     });
     socket.on('vendor-request:new', (newRequest) => {

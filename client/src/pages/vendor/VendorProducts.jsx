@@ -5,13 +5,8 @@ import api from '../../utils/api';
 import toast from 'react-hot-toast';
 
 const VendorProducts = () => {
-  const API_BASE = api?.defaults?.baseURL || '';
-  let API_ORIGIN = '';
-  try {
-    API_ORIGIN = new URL(API_BASE).origin; // e.g., http://localhost:5000
-  } catch {
-    API_ORIGIN = window.location.origin;
-  }
+  // Use the production API URL directly
+  const API_ORIGIN = 'https://e-commerce-2-8abd.onrender.com';
 
   const resolveImageUrl = (url) => {
     if (!url) return 'https://via.placeholder.com/80';
