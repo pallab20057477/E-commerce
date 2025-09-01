@@ -49,14 +49,15 @@ const io = setupSocket(server, {
 app.set('io', io);
 
 // CORS Configuration
+const allowedOrigins = [
+  'https://bidcart-v32j.onrender.com',
+  'http://localhost:3000',
+  process.env.CLIENT_URL
+].filter(Boolean);
+
+// Configure CORS with specific options
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = [
-      'https://bidcart-v32j.onrender.com',
-      'http://localhost:3000',
-      process.env.CLIENT_URL
-    ].filter(Boolean);
-    
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
@@ -69,12 +70,33 @@ const corsOptions = {
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
+  exposedHeaders: ['Content-Length'],
+  maxAge: 86400 // 24 hours
 };
 
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
 // Middleware
+// Add manual CORS headers as a fallback
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', true);
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// Use CORS middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
