@@ -37,17 +37,24 @@ const app = express();
 const server = http.createServer(app);
 const io = setupSocket(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: [
+      'https://bidcart-v32j.onrender.com',
+      'http://localhost:3000',
+      process.env.CLIENT_URL
+    ].filter(Boolean),
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true
   }
 });
 app.set('io', io);
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CLIENT_URL 
-    : 'http://localhost:3000',
+  origin: [
+    'https://bidcart-v32j.onrender.com',  // Production frontend
+    'http://localhost:3000',              // Local development
+    process.env.CLIENT_URL                // From environment variable
+  ].filter(Boolean), // Remove any falsy values
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
