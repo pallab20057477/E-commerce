@@ -4,8 +4,11 @@ import { toast } from 'react-hot-toast';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: 'https://e-commerce-2-8abd.onrender.com/api',
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? 'https://e-commerce-2-8abd.onrender.com/api' 
+    : '/api', // Use proxy in development
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },

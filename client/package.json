@@ -2,7 +2,16 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": {
+    "/api": {
+      "target": "https://e-commerce-2-8abd.onrender.com",
+      "changeOrigin": true,
+      "secure": true,
+      "pathRewrite": {
+        "^/api": "/api"
+      }
+    }
+  },
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
